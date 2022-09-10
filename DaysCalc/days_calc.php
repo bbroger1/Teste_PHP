@@ -7,6 +7,12 @@ automaticamente no momento em que o script for executado*/
 session_start();
 
 $date = filter_var(preg_replace("([^0-9/] | [^0-9-])", "", htmlentities($_GET['date'])));
+if (!$date || $date == null) {
+    $_SESSION['error'] = "Por favor selecione uma data.";
+    header('Location: index.php');
+    exit;
+}
+
 $current_date = date("Y-m-d");
 
 $days = calc_days($current_date, $date);

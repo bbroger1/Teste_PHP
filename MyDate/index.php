@@ -1,5 +1,17 @@
 <?php
 session_start();
+require_once("MyDate.php");
+
+if (isset($_POST['date'])) {
+    $date = filter_var(preg_replace("([^0-9/] | [^0-9-])", "", htmlentities($_POST['date'])));
+    if (!$date || $date == null) {
+        $_SESSION['error'] = "Por favor selecione uma data.";
+        header('Location: index.php');
+        exit;
+    }
+    $myDate = new MyDate();
+    $myDate->index($date);
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -8,7 +20,7 @@ session_start();
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cálculo de dias passados</title>
+    <title>My Date</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
 
@@ -26,11 +38,11 @@ session_start();
             unset($_SESSION['error']);
         }
         ?>
-        <form action="days_calc.php" method="get" class="mt-5 text-center">
+        <form action="" method="POST" class="mt-5 text-center">
             <div class="row text-center">
                 <div class="col">
-                    <label for="date">Selecione a data:</label>
-                    <input type="date" name="date" id="date" required>
+                    <label for="date">Informe a data:</label>
+                    <input type="text" name="date" id="date">
                 </div>
             </div>
             <button class="btn btn-sm btn-success mt-2" type="submit">Pesquisar</button>
