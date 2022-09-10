@@ -64,12 +64,12 @@ $pagination = $obj->pagination($user_id);
                         <?php if (isset($user_id) && $user_id != null) {
                             echo '<li class="page-item"><a class="page-link" href="http://localhost:3000/index.php?id=' . $user['id'] . '">1</a></li>';
                         } else {
-                            $previous = $pagination - 1;
+                            $previous = $page - 1;
                             if ($previous <= 0) {
                                 $previous = 1;
                             }
 
-                            $next = $pagination + 1;
+                            $next = $page + 1;
                             if ($next > $pagination) {
                                 $next = $pagination;
                             }
