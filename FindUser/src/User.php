@@ -22,8 +22,17 @@ class User
         if (isset($user_id) && $user_id != null) {
             $stmt = $this->pdo->prepare("SELECT * FROM user WHERE id = $user_id");
             $stmt->execute();
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            if (!$result = $stmt->fetchAll(PDO::FETCH_ASSOC)) {
+                $_SESSION['error'] = "Usuário inexistente.";
+                header('Location: index.php');
+                exit;
+            }
         } else {
+            if (isset($page) && $page <= 0) {
+                $_SESSION['error'] = "Página inexistente.";
+                header('Location: index.php');
+                exit;
+            }
             $offset = ($page - 1) * $this->per_page;
             $stmt = $this->pdo->prepare("SELECT * FROM user LIMIT $this->per_page OFFSET $offset");
             $stmt->execute();
@@ -33,7 +42,7 @@ class User
         return $result;
     }
 
-    public function pagination($user_id)
+    public function pagination($page, $user_id)
     {
         if (isset($user_id) && $user_id != null) {
             $count = 1;
@@ -42,6 +51,16 @@ class User
             $stmt->execute();
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
             $count = ceil($result['count'] / $this->per_page);
+
+            if (isset($page) && $page > $count) {
+                $_SESSION['error'] = "Página inexistente.";
+                header('Location: index.php');
+                exit;
+            } elseif (isset($page) && $page <= 0) {
+                $_SESSION['error'] = "Página inexistente.";
+                header('Location: index.php');
+                exit;
+            }
         }
 
         return $count;

@@ -21,7 +21,7 @@ if (isset($_GET["id"])) {
 $obj = new User();
 $users = $obj->index($page, $user_id);
 
-$pagination = $obj->pagination($user_id);
+$pagination = $obj->pagination($page, $user_id);
 ?>
 
 <!DOCTYPE html>
@@ -53,7 +53,10 @@ $pagination = $obj->pagination($user_id);
             <?php foreach ($users as $user) : ?>
                 <div class="row">
                     <div class="text-center mt-2 mb-2">
-                        <?= $user['nome']; ?> - <a class="btn btn-sm btn-success" href="?id=<?= $user['id']; ?>">Ver</a> - <a class="btn btn-sm btn-primary" href="http://localhost:3000/index.php">Voltar</a>
+                        <?= $user['nome']; ?> - <a class="btn btn-sm btn-success" href="?id=<?= $user['id']; ?>">Ver</a>
+                        <?php if ($user_id) {
+                            echo '- <a class="btn btn-sm btn-primary" href="http://localhost:3000/index.php">Voltar</a>';
+                        } ?>
                     </div>
                 </div>
             <?php endforeach; ?>
@@ -77,7 +80,11 @@ $pagination = $obj->pagination($user_id);
                             echo '<li class="page-item"><a class="page-link" href="http://localhost:3000/index.php?p=' . $previous . '" aria-label="Anterior"> <span aria-hidden="true">&laquo;</span></a></li>';
 
                             for ($i = 1; $i <= $pagination; $i++) {
-                                echo '<li class="page-item"><a class="page-link" href="http://localhost:3000/index.php?p=' . $i . '">' . $i . '</a></li>';
+                                $active = "";
+                                if ($page == $i) {
+                                    $active = "active";
+                                }
+                                echo '<li class="page-item ' . $active . '"><a class="page-link" href="http://localhost:3000/index.php?p=' . $i . '">' . $i . '</a></li>';
                             }
 
                             echo '<li class="page-item"><a class="page-link" href="http://localhost:3000/index.php?p=' . $next . '" aria-label="Anterior"> <span aria-hidden="true">&raquo;</span></a></li>';
